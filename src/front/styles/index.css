@@ -1,3 +1,70 @@
-/* 
-    General Styles used on every website (Don't Repeat Yourself)
-*/
+/* Fondo principal */
+body {
+    background-color: #16425b;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Asegura que el body ocupe toda la ventana */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Estilo para la tarjeta */
+  .card {
+    background-color: white;
+    border: none;
+  }
+  
+  /* Títulos */
+  .card h1 {
+    color: black;
+  }
+  
+  /* Botones */
+  .btn-primary {
+    background-color: #3a7ca5;
+    border-color: #3a7ca5;
+  }
+  
+  .btn-primary:hover {
+    background-color: #16425b;
+    border-color: #16425b;
+  }
+  
+  .btn-secondary {
+    background-color: gray;
+    border-color: gray;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #3a7ca5;
+    border-color: #3a7ca5;
+  }
+  
+  /* Inputs */
+  .form-control {
+    border: none;
+    border-bottom: 2px solid #353536; 
+    background-color: transparent;
+    border-radius: 0;
+    color: black;
+    padding-left: 0;
+  }
+  
+  .form-control:focus {
+    outline: none;
+    border-bottom: 2px solid black;
+    box-shadow: none;
+  }
+  
+  .form-control::placeholder {
+    color: gray;
+  }
+  
+  /* Labels */
+  label {
+    color: gray;
+    font-weight: 500;
+  }
+  
