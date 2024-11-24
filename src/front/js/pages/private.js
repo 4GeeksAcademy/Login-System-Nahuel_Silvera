@@ -18,6 +18,7 @@ const Private = () => {
         <p className="text-muted">
           Ahora deberias poder ver ésto
         </p>
+        <img src="https://25.media.tumblr.com/a7458a7a22689a0865132823aca81fa6/tumblr_mgxrc8TdJa1s3k0rzo1_400.gif"></img>
       </div>
     </div>
   );

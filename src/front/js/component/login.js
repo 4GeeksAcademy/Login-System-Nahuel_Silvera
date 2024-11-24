@@ -15,12 +15,12 @@ const Login = () => {
   });
 
   const [isSignIn, setIsSignIn] = useState(false); // Estado para alternar entre login y sign up
+  const [isLoading, setIsLoading] = useState(false); // Estado para mostrar spinner y deshabilitar formulario
 
   // Redirigir al usuario si ya tiene un token válido
   useEffect(() => {
     const token = localStorage.getItem("idToken");
     if (token) {
-      // Aquí podrías validar el token si fuera necesario (por ejemplo, comprobando su expiración)
       navigate("/private");
     }
   }, [navigate]);
@@ -37,37 +37,54 @@ const Login = () => {
 
   const registerUser = async (e) => {
     e.preventDefault();
-    if (user.password === user.password_check && user.password !== "") {
+    setIsLoading(true); // Activar el estado de carga
+
+    if (
+      user.username === "" ||
+      user.email === "" ||
+      user.password === "" ||
+      user.password_check === ""
+    ) {
+      addAlert("Debe rellenar todos los campos para continuar", "warning");
+      setIsLoading(false);
+      return;
+    }
+
+    if (user.password === user.password_check) {
       const createUser = await actions.createUser(user);
+      setIsLoading(false); // Desactivar carga
       if (createUser) {
-        addAlert("User was created successfully", "success");
+        addAlert("Usuario creado exitosamente", "success");
         setUser({
           username: "",
           email: "",
           password: "",
           password_check: "",
         });
-        setIsSignIn(false); // Cambiar al formulario de login
+        setIsSignIn(false); // Cambiar al formulario de inicio de sesión
       } else {
-        addAlert("An unexpected error occurred", "danger");
+        addAlert("Ocurrió un error inesperado", "danger");
       }
     } else {
-      addAlert("Passwords don't match", "warning");
+      addAlert("Las contraseñas no coinciden", "warning");
       setUser({ ...user, password: "", password_check: "" });
+      setIsLoading(false);
     }
   };
 
   const loginUser = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Activar el estado de carga
 
     if (user.email === "" || user.password === "") {
-      addAlert("El usuario o la contraseña no deben estar vacíos", "warning");
+      addAlert("Debes rellenar ambos campos para continuar", "warning");
+      setIsLoading(false);
       return;
     } else {
       const login = await actions.login(user.email, user.password);
+      setIsLoading(false); // Desactivar carga
 
       if (login) {
-        // Si el inicio de sesión es exitoso, navegar a la página deseada
         navigate("/private");
       } else {
         addAlert("Inicio de sesión fallido. Verifica tus credenciales.", "danger");
@@ -118,6 +135,7 @@ const Login = () => {
                 placeholder="Username"
                 value={user.username}
                 onChange={(e) => setUser({ ...user, username: e.target.value })}
+                disabled={isLoading}
               />
               <label htmlFor="usernameInput">Username</label>
             </div>
@@ -131,6 +149,7 @@ const Login = () => {
               placeholder="name@example.com"
               value={user.email}
               onChange={(e) => setUser({ ...user, email: e.target.value })}
+              disabled={isLoading}
             />
             <label htmlFor="emailInput">Email</label>
           </div>
@@ -143,6 +162,7 @@ const Login = () => {
               placeholder="Password"
               value={user.password}
               onChange={(e) => setUser({ ...user, password: e.target.value })}
+              disabled={isLoading}
             />
             <label htmlFor="passwordInput">Password</label>
           </div>
@@ -156,6 +176,7 @@ const Login = () => {
                 placeholder="Confirm Password"
                 value={user.password_check}
                 onChange={(e) => setUser({ ...user, password_check: e.target.value })}
+                disabled={isLoading}
               />
               <label htmlFor="passwordCheckInput">Confirm Password</label>
             </div>
@@ -163,17 +184,29 @@ const Login = () => {
 
           <div className="d-flex justify-content-center gap-3">
             {isSignIn ? (
-              <button className="btn btn-secondary px-4" type="button" onClick={toggleForm}>
+              <button className="btn btn-secondary px-4" type="button" onClick={toggleForm} disabled={isLoading}>
                 Back to Login
               </button>
             ) : (
-              <button className="btn btn-secondary px-4" type="button" onClick={toggleForm}>
+              <button className="btn btn-secondary px-4" type="button" onClick={toggleForm} disabled={isLoading}>
                 Sign up
               </button>
             )}
 
-            <button className="btn btn-primary px-4" type="submit">
-              {isSignIn ? "Register" : "Login"}
+            <button className="btn btn-primary px-4 d-flex align-items-center" type="submit" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                </>
+              ) : isSignIn ? (
+                "Register"
+              ) : (
+                "Login"
+              )}
             </button>
           </div>
         </form>

@@ -68,3 +68,17 @@ body {
     font-weight: 500;
   }
   
+  @keyframes slideInUp {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .card {
+    animation: slideInUp 0.8s ease-out;
+  }

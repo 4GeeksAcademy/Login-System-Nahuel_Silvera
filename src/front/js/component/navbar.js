@@ -4,17 +4,23 @@ import { Link, useLocation } from "react-router-dom";
 export const Navbar = () => {
   const location = useLocation();
 
-  // Definir qué mostrar según la ruta actual
+  // No mostrar el Navbar en la página de login
   if (location.pathname === "/login") {
-    return null; // No renderizar el navbar en /login
+    return null;
   }
 
   return (
     <nav className="navbar navbar-dark bg-dark">
       <div className="container">
-        <Link to="/" className="navbar-brand mb-0 h1">
-          React Boilerplate
-        </Link>
+        {location.pathname === "/private" ? (
+          // Mostrar "Bienvenido" sin redirección
+          <span className="navbar-brand mb-0 h1">Bienvenido</span>
+        ) : (
+          // Mostrar "React Boilerplate" con redirección
+          <Link to="/" className="navbar-brand mb-0 h1">
+            React Boilerplate
+          </Link>
+        )}
         <div className="ms-auto">
           {location.pathname === "/private" ? (
             <button
@@ -22,7 +28,7 @@ export const Navbar = () => {
               onClick={() => {
                 // Lógica para cerrar sesión
                 localStorage.removeItem("idToken"); // Eliminar token
-                window.location.href = "/login"; 
+                window.location.href = "/login";
               }}
             >
               Cerrar sesión
